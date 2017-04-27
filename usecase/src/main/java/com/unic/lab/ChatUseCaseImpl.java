@@ -8,13 +8,13 @@ import java.util.stream.Collectors;
 /**
  * Created by fridolin.jackstadt on 06/04/2017.
  */
-public class Chat {
+public class ChatUseCaseImpl implements ChatUseCase {
 
     private final ChatRepliesRepository repository;
     private final Map<ChatParticipant, Sender> participants = new HashMap<>();
-    private final Sender allSender = reply -> participants.values().forEach(reply::sendTo);
+    private final Sender allSender = reply -> participants.values().forEach(participant -> participant.send(reply));
 
-    public Chat(ChatRepliesRepository repository) {
+    public ChatUseCaseImpl(ChatRepliesRepository repository) {
         this.repository = repository;
     }
 
@@ -27,7 +27,7 @@ public class Chat {
         repository.save(reply);
     }
 
-    List<ChatReply> getReplies(ChatParticipant participant) {
+    @Override public List<ChatReply> getReplies(ChatParticipant participant) {
         return repository.getReplies().stream().filter(participant::isRecipient).collect(Collectors.toList());
     }
 

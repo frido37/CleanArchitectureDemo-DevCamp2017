@@ -9,17 +9,13 @@
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 
-	<artifactId>web</artifactId>
+	<artifactId>usecase</artifactId>
 
 	<dependencies>
 		<dependency>
 			<groupId>com.unic.lab</groupId>
-			<artifactId>usecase</artifactId>
+			<artifactId>contracts</artifactId>
 			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-webmvc</artifactId>
 		</dependency>
 	</dependencies>
 

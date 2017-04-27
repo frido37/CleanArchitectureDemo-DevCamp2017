@@ -19,7 +19,7 @@
 		</dependency>
 		<dependency>
 			<groupId>com.unic.lab</groupId>
-			<artifactId>core</artifactId>
+			<artifactId>db</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 

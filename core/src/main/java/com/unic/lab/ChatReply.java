@@ -41,8 +41,4 @@ public class ChatReply {
         return text;
     }
 
-    void sendTo(Sender sender) {
-        sender.send(this);
-    }
-
 }
