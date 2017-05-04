@@ -7,8 +7,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class Devcamp2017Application {
 
 	public static void main(String[] args) {
-		MainController.chat = new ChatUseCaseImpl(new MemoryChatRepliesRepository());
-
 		SpringApplication.run(Devcamp2017Application.class, args);
 	}
 

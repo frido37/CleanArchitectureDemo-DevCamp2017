@@ -14,12 +14,12 @@
 	<dependencies>
 		<dependency>
 			<groupId>com.unic.lab</groupId>
-			<artifactId>web</artifactId>
+			<artifactId>infra-web</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.unic.lab</groupId>
-			<artifactId>db</artifactId>
+			<artifactId>infra-db</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 

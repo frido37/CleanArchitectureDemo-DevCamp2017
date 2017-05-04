@@ -7,11 +7,10 @@
 	<artifactId>devcamp2017</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<modules>
-		<module>core</module>
-		<module>contracts</module>
-		<module>web</module>
-		<module>usecase</module>
-		<module>db</module>
+		<module>entities</module>
+		<module>usecases</module>
+		<module>infra-db</module>
+		<module>infra-web</module>
 		<module>boot</module>
 	</modules>
 	<packaging>pom</packaging>
