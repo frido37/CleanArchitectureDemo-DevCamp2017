@@ -1,10 +1,8 @@
 package com.unic.lab.web;
 
-import java.util.List;
-
-import javax.inject.Inject;
-
-import org.springframework.context.annotation.Scope;
+import com.unic.lab.ChatParticipant;
+import com.unic.lab.ChatReply;
+import com.unic.lab.ChatService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,19 +10,15 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.unic.lab.ChatParticipant;
-import com.unic.lab.ChatReply;
-import com.unic.lab.ChatService;
+import javax.inject.Inject;
 
 /**
  * Created by fridolin.jackstadt on 06/04/2017.
  */
-@Scope("session")
 @Controller
 public class MainController {
 
     private final ChatService chat;
-    private ChatParticipant me = new ChatParticipant("Anonymous");
 
     @Inject
     public MainController(ChatService chat) {
@@ -33,28 +27,30 @@ public class MainController {
 
     @GetMapping("/replies")
     public ModelAndView getAllReplies(Model model) {
-        // model.addAttribute("message", new Message().withFromName(me.getName()));
-        List<ChatReply> replies = chat.getReplies(me);
+        ChatParticipant me = new ChatParticipant("Anonymous");
+        Message message = new Message(me.getName());
 
-        // model.addAttribute("replies", replies);
-
-        ModelAndView modelAndView = new ModelAndView().addObject("replies", replies).addObject("message", new Message().withFromName(me.getName()));
-        modelAndView.setViewName("chat");
-
-        return modelAndView;
+        return new ModelAndView("chat")
+                .addObject("replies", chat.getReplies(me))
+                .addObject("message", message);
     }
 
     @PostMapping(value = "/replies")
     public ModelAndView sendMessage(@ModelAttribute("message") Message message) {
-        me = new ChatParticipant(message.getFromName());
-        ChatReply reply = new ChatReply(me, new ChatParticipant(message.getToName()), message.getText());
+        ChatParticipant me = new ChatParticipant(message.getFromName());
+        if (message.isNotEmpty()) {
+            ChatParticipant to = getParticipant(message.getToName());
+            chat.sendReply(new ChatReply(me, to, message.getText()));
+            message.reset();
+        }
 
-        chat.sendReply(reply);
+        return new ModelAndView("chat")
+                .addObject("replies", chat.getReplies(me))
+                .addObject("message", message);
+    }
 
-        ModelAndView modelAndView = new ModelAndView().addObject("replies", chat.getReplies(me)).addObject("message", new Message().withFromName(me.getName()));
-        modelAndView.setViewName("chat");
-
-        return modelAndView;
+    private ChatParticipant getParticipant(String name) {
+        return name.isEmpty() ? null : new ChatParticipant(name);
     }
 
 }

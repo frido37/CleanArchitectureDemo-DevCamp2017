@@ -29,8 +29,6 @@ public class ChatServiceImpl implements ChatService {
 
     @Override
     public void sendReply(ChatReply reply) {
-        if (reply.getText().isEmpty())
-            return;
         reply.getTo().map(participants::get).orElse(allSender).send(reply);
         repository.save(reply);
     }
