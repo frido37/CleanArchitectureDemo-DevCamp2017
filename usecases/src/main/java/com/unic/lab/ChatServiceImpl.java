@@ -1,11 +1,12 @@
 package com.unic.lab;
 
-import javax.inject.Inject;
-import javax.inject.Named;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+
+import javax.inject.Inject;
+import javax.inject.Named;
 
 /**
  * Created by fridolin.jackstadt on 06/04/2017.
@@ -26,12 +27,16 @@ public class ChatServiceImpl implements ChatService {
         participants.put(participant, sender);
     }
 
-    void sendReply(ChatReply reply) {
+    @Override
+    public void sendReply(ChatReply reply) {
+        if (reply.getText().isEmpty())
+            return;
         reply.getTo().map(participants::get).orElse(allSender).send(reply);
         repository.save(reply);
     }
 
-    @Override public List<ChatReply> getReplies(ChatParticipant participant) {
+    @Override
+    public List<ChatReply> getReplies(ChatParticipant participant) {
         return repository.getReplies().stream().filter(participant::isRecipient).collect(Collectors.toList());
     }
 

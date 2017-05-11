@@ -7,6 +7,8 @@ import java.util.List;
  */
 public interface ChatService {
 
+    void sendReply(ChatReply reply);
+
     List<ChatReply> getReplies(ChatParticipant participant);
 
 }

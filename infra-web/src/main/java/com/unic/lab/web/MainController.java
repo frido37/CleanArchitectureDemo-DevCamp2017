@@ -1,32 +1,61 @@
 package com.unic.lab.web;
 
-import com.unic.lab.ChatParticipant;
-import com.unic.lab.ChatReply;
-import com.unic.lab.ChatService;
+import java.util.List;
+
+import javax.inject.Inject;
+
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.ModelAndView;
 
-import javax.inject.Inject;
-import java.util.List;
+import com.unic.lab.ChatParticipant;
+import com.unic.lab.ChatReply;
+import com.unic.lab.ChatService;
 
 /**
  * Created by fridolin.jackstadt on 06/04/2017.
  */
 @Scope("session")
-@Controller public class MainController {
+@Controller
+public class MainController {
 
     private final ChatService chat;
     private ChatParticipant me = new ChatParticipant("Anonymous");
 
-    @Inject public MainController(ChatService chat) {
+    @Inject
+    public MainController(ChatService chat) {
         this.chat = chat;
     }
 
-    @RequestMapping("/") public String getAllReplies(Model model) {
+    @GetMapping("/replies")
+    public ModelAndView getAllReplies(Model model) {
+        model.addAttribute("message", new Message());
         List<ChatReply> replies = chat.getReplies(me);
-        return "hello";
+
+        model.addAttribute("replies", replies);
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.addObject(replies);
+        modelAndView.setViewName("chat");
+
+        return modelAndView;
+    }
+
+    @PostMapping(value = "/replies")
+    public ModelAndView sendMessage(@ModelAttribute("message") Message message) {
+        ChatReply reply = new ChatReply(me, message.getText());
+        chat.sendReply(reply);
+        List<ChatReply> replies = chat.getReplies(me);
+
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.addObject("replies", replies);
+        modelAndView.addObject("message", new Message());
+        modelAndView.setViewName("chat");
+
+        return modelAndView;
     }
 
 }
