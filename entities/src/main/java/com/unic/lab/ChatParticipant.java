@@ -17,7 +17,8 @@ public class ChatParticipant {
         return name;
     }
 
-    @Override public boolean equals(Object o) {
+    @Override
+    public boolean equals(Object o) {
         if (this == o)
             return true;
         if (o == null || getClass() != o.getClass())
@@ -26,11 +27,12 @@ public class ChatParticipant {
         return Objects.equals(name, that.name);
     }
 
-    @Override public int hashCode() {
+    @Override
+    public int hashCode() {
         return Objects.hash(name);
     }
 
-    boolean isRecipient(ChatReply reply) {
-        return reply.getTo().map(this::equals).orElse(true);
+    boolean isRecipientOrSender(ChatReply reply) {
+        return reply.getFrom().equals(this) || reply.getTo().map(this::equals).orElse(true);
     }
 }

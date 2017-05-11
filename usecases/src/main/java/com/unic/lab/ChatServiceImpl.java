@@ -37,7 +37,7 @@ public class ChatServiceImpl implements ChatService {
 
     @Override
     public List<ChatReply> getReplies(ChatParticipant participant) {
-        return repository.getReplies().stream().filter(participant::isRecipient).collect(Collectors.toList());
+        return repository.getReplies().stream().filter(participant::isRecipientOrSender).collect(Collectors.toList());
     }
 
 }

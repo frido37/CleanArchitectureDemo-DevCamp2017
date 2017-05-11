@@ -33,12 +33,12 @@ public class MainController {
 
     @GetMapping("/replies")
     public ModelAndView getAllReplies(Model model) {
-        model.addAttribute("message", new Message());
+        // model.addAttribute("message", new Message().withFromName(me.getName()));
         List<ChatReply> replies = chat.getReplies(me);
 
-        model.addAttribute("replies", replies);
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.addObject(replies);
+        // model.addAttribute("replies", replies);
+
+        ModelAndView modelAndView = new ModelAndView().addObject("replies", replies).addObject("message", new Message().withFromName(me.getName()));
         modelAndView.setViewName("chat");
 
         return modelAndView;
@@ -46,13 +46,12 @@ public class MainController {
 
     @PostMapping(value = "/replies")
     public ModelAndView sendMessage(@ModelAttribute("message") Message message) {
-        ChatReply reply = new ChatReply(me, message.getText());
-        chat.sendReply(reply);
-        List<ChatReply> replies = chat.getReplies(me);
+        me = new ChatParticipant(message.getFromName());
+        ChatReply reply = new ChatReply(me, new ChatParticipant(message.getToName()), message.getText());
 
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.addObject("replies", replies);
-        modelAndView.addObject("message", new Message());
+        chat.sendReply(reply);
+
+        ModelAndView modelAndView = new ModelAndView().addObject("replies", chat.getReplies(me)).addObject("message", new Message().withFromName(me.getName()));
         modelAndView.setViewName("chat");
 
         return modelAndView;
