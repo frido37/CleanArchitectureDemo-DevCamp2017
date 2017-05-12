@@ -13,7 +13,7 @@
     </tr>
 </th:block>
 
-<h2>Form</h2>
+<h2>new message</h2>
 <form action="#" th:action="@{/replies}" th:object="${message}" method="post">
     <p>Von: <input type="text" th:field="*{fromName}" th:default="Anonymous"/></p>
     <p>An: <input type="text" th:field="*{toName}" th:default="Anonymous"/></p>
